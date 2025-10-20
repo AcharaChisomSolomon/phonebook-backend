@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-const persons = [
+let persons = [
     { 
       "id": "1",
       "name": "Arto Hellas", 
@@ -45,6 +45,18 @@ app.get('/api/persons/:id', (request, response) => {
   } else {
     response.status(404).end()
   }
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  const hasPerson = persons.some(person => person.id === id)
+
+  if (!hasPerson) {
+    response.status(404).json({ message: `person with id ${id} not found!`})
+  }
+
+  persons = persons.filter(person => person.id !== id)
+  response.status(204).end()
 })
 
 
